@@ -14,4 +14,6 @@ It support the following formats :
  * each plain text element goes through `formatPlainText` which can do the additional tricks (htmlEscape, but also autolinks, etc.)
  * `====== title ======` : h1 title, (use less = for h2,h3,...)
  * `<node>...</node>` : similar to tags but the content is not parsed, will call `formatNode` which can return null to keep it as-it
+ * `@url@` : create an img. <img src="url" />
+ * `http://url` : create a link. <a href="http://url">http://url</a>
 
