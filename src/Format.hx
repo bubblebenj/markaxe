@@ -1,4 +1,3 @@
-
 private enum Token {
 	TData( str : String );
 	TSpace;
@@ -61,10 +60,26 @@ class Format {
 			var url = if( attrib == null || !rlink.match(attrib) ) '#' else rlink.matched(1);
 			['<a href="' + url + '" target="_blank">','</a>'];
 		default:
+			//{attr1:val1;attr2:val2;}
+			var l_regexpAttrlist	= ~/{(.*)}/;
+			var l_attributes 		= "";
+			if ( l_regexpAttrlist.match(attrib) )
+			{
+				var l_attrList		= l_regexpAttrlist.matched(1).split( ";" );
+				for ( i in l_attrList )
+				{
+					if ( i != "" ) 
+					{
+						var l_attrParts	= i.split(":");
+						l_attributes += ' '+l_attrParts[0]+'="'+l_attrParts[1]+'"';
+					}
+				}
+			}
+			
 			if( span )
-				['<span class="' + t + '">','</span>'];
+				['<span class="' + t + '" '+l_attributes+'>','</span>'];
 			else
-				['<div class="' + t + '">','</div>'];
+				['<div class="' + t + '" '+l_attributes+'>','</div>'];
 		}
 	}
 
@@ -79,6 +94,10 @@ class Format {
 		});
 		// image
 		t = ~/@([A-Za-z0-9_\/.]+)@/g.replace(t, '<img src="$1"/>');
+		// replace some fun characters
+		t = StringTools.replace( t, "(C)", "&copy;" );		t = StringTools.replace( t, "(c)", "&copy;" );
+		t = StringTools.replace( t, "(R)", "&reg;" );		t = StringTools.replace( t, "(r)", "&reg;" );
+		t = StringTools.replace( t, "(TM)", "&trade;" );	t = StringTools.replace( t, "(tm)", "&trade;" );
 		return t;
 	}
 
@@ -674,4 +693,3 @@ class Format {
 	}
 
 }
-
